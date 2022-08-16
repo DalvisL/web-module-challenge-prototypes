@@ -15,11 +15,25 @@
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
 
-function Person() {
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+  this.stomach = [];
 
 }
-
-
+Person.prototype.eat = function(someFood) {
+  if(this.stomach.length <= 10) {
+    this.stomach.push(someFood);
+  }
+}
+Person.prototype.poop = function() {
+   if(this.stomach.length === 10) {
+    this.stomach = []
+   }
+}
+Person.prototype.toString = function() {
+  return `${this.name}, ${this.age}`;
+}
 /*
   TASK 2
     - Write a Car constructor that initializes `model` and `milesPerGallon` from arguments.
@@ -36,10 +50,36 @@ function Person() {
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
-
+function Car(model, milesPerGallon) {
+this.model = model;
+this.milesPerGallon = milesPerGallon
+this.tank = 0;
+this.odometer = 0;
 }
 
+Car.prototype.fill = function(gallons) {
+  return this.tank += gallons;
+}
+
+Car.prototype.drive = function(distance) {
+  let drivableMiles = this.milesPerGallon * this.tank;
+  let distDriven = distance/this.milesPerGallon;
+  if(distance <= drivableMiles) {
+    this.odometer += distance;
+    this.tank = this.tank - distDriven
+  } else {
+    this.odometer = this.odometer + drivableMiles;
+    this.tank = 0;
+    return `I ran out of fuel at ${this.odometer} miles!`;
+  }
+}
+
+// const volvo = new Car({
+//   model: 'XC90',
+//   milesPerGallon: 25,
+//   tank: 0,
+//   odometer: 0
+// })
 
 /*
   TASK 3
@@ -49,8 +89,14 @@ function Car() {
         + Should return a string "Playing with x", x being the favorite toy.
 */
 
-function Baby() {
+function Baby(name, age, favoriteToy) {
+  Person.call(this, name, age);
+  this.favoriteToy = favoriteToy;
+}
 
+Baby.prototype = Object.create(Person.prototype);
+Baby.prototype.play = function() {
+  return `Playing with ${this.favoriteToy}`;
 }
 
 
